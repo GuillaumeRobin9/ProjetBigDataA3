@@ -31,6 +31,18 @@ for (i in 1:length(data$place)) {
   }
 }
 
+#recuperation des lignes avec "id_code_insee" commence par 97
+verif <- data[grepl("^97", data$id_code_insee),]
+
+#inversion des valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97
+for(i in 1:length(data$latitude)) {
+  if (grepl("^97", data$id_code_insee[i])) {
+    temp <- data$latitude[i]
+    data$latitude[i] <- data$longitude[i]
+    data$longitude[i] <- temp
+  }
+}
+
 
 #stockage des villes correspondant aux valeurs de lat et long nulles
 cities <- unique(data$ville[data$lat == 0 & data$long == 0])
@@ -104,6 +116,8 @@ for(i in 1:length(data$latitude)) {
     }
   }
 }
+
+
 
 
 #export csv
