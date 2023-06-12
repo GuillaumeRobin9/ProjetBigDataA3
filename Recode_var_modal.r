@@ -20,4 +20,4 @@ for (i in 1:length(old_cat_veh_values)) {
 }
 
 #export csv
-write.csv(data, file = "data/stat_acc_V3_modifModal.csv", sep = ";", row.names = FALSE)
+write.table(data, file = "data/stat_acc_V3_modifModal.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
