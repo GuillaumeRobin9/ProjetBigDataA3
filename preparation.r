@@ -7,22 +7,6 @@ library(dplyr)
 data <- read.csv("data/stat_acc_V3.csv", sep=";")
 
 #--------------------------------------------------------------------------------------------------------------
-#----------------------------------------------FIX FORMAT COLONNES---------------------------------------------
-#--------------------------------------------------------------------------------------------------------------
-
-#On fixe le format date pour la colonne "date"
-data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
-
-#On fixe la colonne "age" en tant que numérique
-data$age <- as.numeric(data$age)
-
-#On fixe la colonne "an_nais" en tant que numérique
-data$an_nais <- as.numeric(data$an_nais)
-
-#On fixe la colonne "place" en tant que numérique
-data$place <- as.numeric(data$place)
-
-#--------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------
 
 #Les valeurs numériques des dictionnaires suivants sont issus de la documentation de la base de données
@@ -351,6 +335,25 @@ data$descr_type_col <- recode(data$descr_type_col, "Deux véhicules - Frontale" 
 
 data$descr_dispo_secu <- recode(data$descr_dispo_secu, "Utilisation d'une ceinture de sécurité " = 1, "Utilisation d'un casque " = 2, "Présence d'une ceinture de sécurité - Utilisation non déterminable" = 3, "Présence de ceinture de sécurité non utilisée " = 4, "Autre - Non déterminable" = 5, "Présence d'un équipement réfléchissant non utilisé" = 6, "Présence d'un casque non utilisé " = 7, "Utilisation d'un dispositif enfant" = 8, "Présence d'un casque - Utilisation non déterminable" = 9, "Présence dispositif enfant - Utilisation non déterminable" = 10, "Autre - Utilisé" = 11, "Utilisation d'un équipement réfléchissant " = 12, "Autre - Non utilisé" = 13, "Présence équipement réfléchissant - Utilisation non déterminable" = 14, "Présence d'un dispositif enfant non utilisé" = 15)
 
+
+#--------------------------------------------------------------------------------------------------------------
+#----------------------------------------------FIX FORMAT COLONNES---------------------------------------------
+#--------------------------------------------------------------------------------------------------------------
+
+#On fixe le format date pour la colonne "date"
+data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
+
+#On fixe la colonne "age" en tant que numérique
+data$age <- as.integer(data$age)
+
+#On fixe la colonne "an_nais" en tant que numérique
+data$an_nais <- as.integer(data$an_nais)
+
+#On fixe la colonne "place" en tant que numérique
+data$place <- as.integer(data$place)
+
+#On fixe la colonne "id_code_insee" en tant que numérique
+data$id_code_insee <- as.integer(data$id_code_insee)
 
 
 #-------------------------------------------------------------------------------------------------------------
