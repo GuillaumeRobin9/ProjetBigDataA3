@@ -324,4 +324,4 @@ data$descr_type_col <- recode(data$descr_type_col, "Deux véhicules - Frontale" 
 
 
 #export csv
-write.table(data, file = "data/stat_acc_V3_modifModal_nullValues.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
+write.table(data, file = "data/stat_acc_V3.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
