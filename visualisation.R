@@ -1,8 +1,12 @@
+# Installation des librairies
+if (!require("ggplot2")){install.packages("ggplot2")}
+if (!require("lubridate")){install.packages("lubridate")}
+
 library(ggplot2)
 library(lubridate)
 
 # Lecture du CSV
-data <- readLines("~/ISEN/CIR_3/projet_BigData_IA_Web/stat_acc_V3.csv", encoding = "latin1")
+data <- readLines("data/stat_acc_V3.csv", encoding = "latin1")
 data <- iconv(data, from = "latin1", to = "UTF-8")
 data <- read.csv(text = data, sep = ";")
 
