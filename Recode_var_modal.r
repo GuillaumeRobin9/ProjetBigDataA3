@@ -1,3 +1,7 @@
+install.packages("dplyr")
+
+library(dplyr)
+
 #lecture csv file "stat_acc_V3.csv"
 data <- read.csv("data/stat_acc_V3.csv", sep=";")
 
@@ -7,8 +11,6 @@ data <- read.csv("data/stat_acc_V3.csv", sep=";")
 
 #On veut remplacer les valeurs de la colonne "descr_cat_veh" et "descr_grav" par des valeurs numériques
 #Afin de pouvoir mieux les exploiter par la suite
-#On récupère les valeurs uniques de chaque colonne et on les stocke dans un vecteur
-#On crée ensuite un dictionnaire clé valeur avec les valeurs trouvées dans le vecteur
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
 
 
@@ -24,23 +26,11 @@ old_descr_grav_values <- unique(data$descr_grav)
 cat_veh_list <- list("PL seul > 7,5T" = 14, "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque " = 10, "VL seul" = 07, "Autocar" = 38, "PL > 3,5T + remorque" = 15, "Cyclomoteur <50cm3" = 02, "Motocyclette > 125 cm3" = 33, "Tracteur routier + semi-remorque" = 17, "Tracteur agricole" = 21, "PL seul 3,5T <PTCA <= 7,5T" = 13, "Autobus" = 37, "Scooter > 50 cm3 et <= 125 cm3" = 32, "Train" = 39, "Scooter > 125 cm3" = 34, "Scooter < 50 cm3" = 30, "Voiturette (Quadricycle à moteur carrossé) (anciennement \"voiturette ou tricycle à moteur\")" = 03, "Autre véhicule" = 99, "Bicyclette" = 01, "Motocyclette > 50 cm3 et <= 125 cm3" = 31, "Engin spécial" = 20, "Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)" = 36, "Tramway" = 19, "Tracteur routier seul" = 16, "Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)" = 35)
 grav_values <- list("Indemne" = 1, "Tué" = 2, "Blessé hospitalisé" = 3, "Blessé léger" = 4)
 
-#boucle pour remplacer les valeurs de la colonne "descr_cat_veh" par les valeurs du dictionnaire correspondantes
-for (i in 1:length(data$descr_cat_veh)) {
-  for (j in 1:length(cat_veh_list)) {
-    if (data$descr_cat_veh[i] == names(cat_veh_list[j])) {
-      data$descr_cat_veh[i] <- cat_veh_list[[j]]
-    }
-  }
-}
+data$descr_cat_veh <- recode(data$descr_cat_veh, "PL seul > 7,5T" = 14, "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque " = 10, "VL seul" = 07, "Autocar" = 38, "PL > 3,5T + remorque" = 15, "Cyclomoteur <50cm3" = 02, "Motocyclette > 125 cm3" = 33, "Tracteur routier + semi-remorque" = 17, "Tracteur agricole" = 21, "PL seul 3,5T <PTCA <= 7,5T" = 13, "Autobus" = 37, "Scooter > 50 cm3 et <= 125 cm3" = 32, "Train" = 39, "Scooter > 125 cm3" = 34, "Scooter < 50 cm3" = 30, "Voiturette (Quadricycle à moteur carrossé) (anciennement \"voiturette ou tricycle à moteur\")" = 03, "Autre véhicule" = 99, "Bicyclette" = 01, "Motocyclette > 50 cm3 et <= 125 cm3" = 31, "Engin spécial" = 20, "Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)" = 36, "Tramway" = 19, "Tracteur routier seul" = 16, "Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)" = 35)
 
-#boucle pour remplacer les valeurs de la colonne "descr_grav" par les valeurs du dictionnaire correspondantes
-for (i in 1:length(data$descr_grav)) {
-  for (j in 1:length(grav_values)) {
-    if (data$descr_grav[i] == names(grav_values[j])) {
-      data$descr_grav[i] <- grav_values[[j]]
-    }
-  }
-}
+data$descr_grav <- recode(data$descr_grav, "Indemne" = 1, "Tué" = 2, "Blessé hospitalisé" = 3, "Blessé léger" = 4)
+
+
 
 #---------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------MODIF CASES VIDES-----------------------------------------------
@@ -53,6 +43,51 @@ for (i in 1:length(data$place)) {
   }
 }
 
+
+#---------------------------------------------------------------------------------------------------------------
+#---------------------------------------------MODIF DESCR AGGLO-------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à remplacer les valeurs de la colonne "descr_agglo" par des valeurs numériques correspondantes
+#On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+data$descr_agglo <- recode(data$descr_agglo, "Hors agglomération" = 1, "En agglomération" = 2)
+
+
+#---------------------------------------------------------------------------------------------------------------
+#---------------------------------------------MODIF DESCR ATHMO-------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à remplacer les valeurs de la colonne "descr_atm" par des valeurs numériques correspondantes
+#On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+data$descr_athmo <- recode(data$descr_athmo, "Normale" = 1, "Pluie légère" = 2, "Pluie forte" = 3, "Neige – grêle" = 4, "Brouillard – fumée" = 5, "Vent fort – tempête" = 6, "Temps éblouissant" = 7, "Temps couvert" = 8, "Autre" = 9)
+
+#---------------------------------------------------------------------------------------------------------------
+#---------------------------------------------MODIF DESCR LUMI--------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à remplacer les valeurs de la colonne "descr_lum" par des valeurs numériques correspondantes
+#On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+data$descr_lum <- recode(data$descr_lum, "Plein jour" = 1, "Crépuscule ou aube" = 2, "Nuit sans éclairage public" = 3, "Nuit avec éclairage public non allumé" = 4, "Nuit avec éclairage public allumé" = 5)
+
+#---------------------------------------------------------------------------------------------------------------
+#---------------------------------------------MODIF DESCR SURF--------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à remplacer les valeurs de la colonne "descr_etat_surf" par des valeurs numériques correspondantes
+#On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+
+#utilisation de recode pour remplacer les valeurs de la colonne "descr_etat_surf" par les valeurs du dictionnaire correspondantes
+data$descr_etat_surf <- recode(data$descr_etat_surf, "Normale" = 1, "Mouillée" = 2, "Flaques" = 3, "Inondée" = 4, "Enneigée" = 5, "Boue" = 6, "Verglacée" = 7, "Corps gras – huile" = 8, "Autre" = 9)
+
+
+#---------------------------------------------------------------------------------------------------------------
+#--------------------------------------------MODIF DESCR INTERSEC-----------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
 #---------------------------------------------------------------------------------------------------------------
 #-----------------------------------------INVERSION LAT/LONG DOM TOM--------------------------------------------
 #---------------------------------------------------------------------------------------------------------------
@@ -61,7 +96,6 @@ for (i in 1:length(data$place)) {
 #Ces valeurs sont inversées dans le fichier csv
 #On récupère les lignes avec "id_code_insee" commence par 97
 #On inverse les valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97
-
 
 #inversion des valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97
 for(i in 1:length(data$latitude)) {
@@ -126,6 +160,8 @@ data <- subset(data, data$an_nais != "NULL")
 #stock une seule fois chaque ville ou data$latitude == 2009
 arr <- unique(data$ville[data$latitude == 2009])
 
+#print si il y a des NA dans latitude ou longitude
+
 #stock les arrondissements de paris, de marsseille et de lyon dans 3 vecteurs
 arr_paris <- c("PARIS 20", "PARIS 19", "PARIS 18", "PARIS 17", "PARIS 16", "PARIS 15", "PARIS 14", "PARIS 13", "PARIS 12", "PARIS 11", "PARIS 10", "PARIS 09", "PARIS 08", "PARIS 07", "PARIS 06", "PARIS 05", "PARIS 04", "PARIS 03", "PARIS 02", "PARIS 01")
 arr_marseille <- c("MARSEILLE 15", "MARSEILLE 14", "MARSEILLE 13", "MARSEILLE 12", "MARSEILLE 11", "MARSEILLE 10", "MARSEILLE 09", "MARSEILLE 08", "MARSEILLE 07", "MARSEILLE 06", "MARSEILLE 05", "MARSEILLE 04", "MARSEILLE 03", "MARSEILLE 02", "MARSEILLE 01")
@@ -141,7 +177,10 @@ arr_long_lyon <- c("LYON 09"=4.836629, "LYON 08"=4.836629, "LYON 07"=4.836629, "
 arr_long_marseille <- c("MARSEILLE 15"=5.372519, "MARSEILLE 14"=5.372519, "MARSEILLE 13"=5.372519, "MARSEILLE 12"=5.372519, "MARSEILLE 11"=5.372519, "MARSEILLE 10"=5.372519, "MARSEILLES 09"=5.372519, "MARSEILLE 08"=5.372519, "MARSEILLE 07"=5.372519, "MARSEILLE 06"=5.372519, "MARSEILLE 05"=5.372519, "MARSEILLE 04"=5.372519, "MARSEILLE 03"=5.372519, "MARSEILLE 02"=5.372519, "MARSEILLE 01"=5.372519)
 arr_lat_marseille <- c("MARSEILLE 15"=43.296482, "MARSEILLE 14"=43.296482, "MARSEILLE 13"=43.296482, "MARSEILLE 12"=43.296482, "MARSEILLE 11"=43.296482, "MARSEILLE 10"=43.296482, "MARSEILLE 09"=43.296482, "MARSEILLE 08"=43.296482, "MARSEILLE 07"=43.296482, "MARSEILLE 06"=43.296482, "MARSEILLE 05"=43.296482, "MARSEILLE 04"=43.296482, "MARSEILLE 03"=43.296482, "MARSEILLE 02"=43.296482, "MARSEILLE 01"=43.296482)
 
+
+
 #modification des valeurs de latitude et longitude de Paris
+
 for(i in 1:length(data$latitude)) {
   for(j in 1:length(arr_paris)) {
     if (data$ville[i] == arr_paris[j]) {
@@ -152,6 +191,7 @@ for(i in 1:length(data$latitude)) {
 }
 
 #modification des valeurs de latitude et longitude de Lyon
+
 for(i in 1:length(data$latitude)) {
   for(j in 1:length(arr_lyon)) {
     if (data$ville[i] == arr_lyon[j]) {
@@ -162,6 +202,7 @@ for(i in 1:length(data$latitude)) {
 }
 
 #modification des valeurs de latitude et longitude de Marseille
+
 for(i in 1:length(data$latitude)) {
   for(j in 1:length(arr_marseille)) {
     if (data$ville[i] == arr_marseille[j]) {
