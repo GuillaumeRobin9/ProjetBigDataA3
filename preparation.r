@@ -13,6 +13,13 @@ data <- read.csv("data/stat_acc_V3.csv", sep=";")
 #On fixe le format date pour la colonne "date"
 data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
 
+#--------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------
+
+#Les valeurs numériques des dictionnaires suivants sont issus de la documentation de la base de données
+#https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2021/#/resources
+#Seuls les dispositifs de sécurité suivants ont été fixés manuellement car ils ne sont pas présents dans la documentation
+
 
 #--------------------------------------------------------------------------------------------------------------
 #-------------------------------------MODIF CAT VEHICULES + GRAVITE--------------------------------------------
