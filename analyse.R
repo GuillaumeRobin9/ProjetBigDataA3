@@ -6,7 +6,7 @@ library(ggplot2)
 library(lubridate)
 
 # Lecture du CSV
-data <- readLines("data/stat_acc_V3.csv", encoding = "latin1")
+data <- readLines("~/ISEN/CIR_3/projet_BigData_IA_Web/stat_acc_V3_cleared.csv", encoding = "latin1")
 data <- iconv(data, from = "latin1", to = "UTF-8")
 data <- read.csv(text = data, sep = ";")
 
@@ -223,7 +223,6 @@ print(test_chi2)
 
 # ---------- Interprétation
 
-
 # Pearson's Chi-squared test
 # data:  table_croisee
 # X-squared = 1494.1, df = 24, p-value < 2.2e-16
@@ -237,6 +236,8 @@ print(test_chi2)
 # ------------------------------------------------------------------------------------------------
 
 
+# ---------- Régression par mois 
+
 # Extraction du mois
 data$mois <- as.POSIXlt(data$date)$mon + 1
 
@@ -248,5 +249,25 @@ regression <- lm(accidents_par_mois$x ~ accidents_par_mois$mois)
 
 # Affichage du résultat de la régression
 summary(regression)
+
+
+# ---------- Régression par semaine
+
+# Extraction de la semaine
+data$date <- as.Date(data$date, format = "%Y-%m-%d")
+data$semaine <- as.numeric(format(data$date, "%U"))
+
+# Calcul du nombre d'accidents par semaine
+accidents_par_semaine <- aggregate(data$Num_Acc, by = list(semaine = data$semaine), FUN = length)
+
+# Calcul de la régression
+regression <- lm(accidents_par_semaine$x ~ accidents_par_semaine$semaine)
+
+# Affichage du résultat de la régression
+summary(regression)
+
+
+
+
 
 
