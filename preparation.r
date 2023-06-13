@@ -335,7 +335,6 @@ data$descr_type_col <- recode(data$descr_type_col, "Deux véhicules - Frontale" 
 
 data$descr_dispo_secu <- recode(data$descr_dispo_secu, "Utilisation d'une ceinture de sécurité " = 1, "Utilisation d'un casque " = 2, "Présence d'une ceinture de sécurité - Utilisation non déterminable" = 3, "Présence de ceinture de sécurité non utilisée " = 4, "Autre - Non déterminable" = 5, "Présence d'un équipement réfléchissant non utilisé" = 6, "Présence d'un casque non utilisé " = 7, "Utilisation d'un dispositif enfant" = 8, "Présence d'un casque - Utilisation non déterminable" = 9, "Présence dispositif enfant - Utilisation non déterminable" = 10, "Autre - Utilisé" = 11, "Utilisation d'un équipement réfléchissant " = 12, "Autre - Non utilisé" = 13, "Présence équipement réfléchissant - Utilisation non déterminable" = 14, "Présence d'un dispositif enfant non utilisé" = 15)
 
-
 #--------------------------------------------------------------------------------------------------------------
 #----------------------------------------------FIX FORMAT COLONNES---------------------------------------------
 #--------------------------------------------------------------------------------------------------------------
@@ -351,6 +350,14 @@ data$an_nais <- as.integer(data$an_nais)
 
 #On fixe la colonne "place" en tant que integer
 data$place <- as.integer(data$place)
+
+
+#-------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------MODIFICATION AGE--------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+
+#On remplace la colonne age, calculée à partir de maintenant, par leur age au moment de l'accident
+data$age <- (2009 - data$an_nais)
 
 
 #-------------------------------------------------------------------------------------------------------------
