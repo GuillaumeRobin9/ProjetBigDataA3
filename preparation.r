@@ -11,7 +11,7 @@ data <- read.csv("data/stat_acc_V3.csv", sep=";")
 #--------------------------------------------------------------------------------------------------------------
 
 #On fixe le format date pour la colonne "date"
-data$date <- as.POSIXct(data$date, format = "%d/%m/%Y %H:%M")
+data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
 
 
 #--------------------------------------------------------------------------------------------------------------
@@ -343,4 +343,4 @@ data$descr_dispo_secu <- recode(data$descr_dispo_secu, "Utilisation d'une ceintu
 
 
 #export csv
-write.table(data, file = "data/stat_acc_V3_modif.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
+write.table(data, file = "data/stat_acc_V3_cleared.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
