@@ -352,9 +352,6 @@ data$an_nais <- as.integer(data$an_nais)
 #On fixe la colonne "place" en tant que numérique
 data$place <- as.integer(data$place)
 
-#On fixe la colonne "id_code_insee" en tant que numérique
-data$id_code_insee <- as.integer(data$id_code_insee)
-
 
 #-------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------EXPORT CSV-------------------------------------------------
