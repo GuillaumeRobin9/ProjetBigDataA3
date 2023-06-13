@@ -74,8 +74,9 @@ ggplot(data = accidents_par_gravite, aes(x = descr_grav, y = count)) +
 
 
 # Calcul du nombre d'accidents par tranches d'heure
-accidents_par_heure <- as.data.frame(table(hour(data$heure)))
-                                     
+heures <- format(data$date, "%H")
+accidents_par_heure <- as.data.frame(table(heures))
+
 # Renommer les colonnes pour correspondre à votre dataframe
 names(accidents_par_heure) <- c("heure", "count")
 
