@@ -343,13 +343,13 @@ data$descr_dispo_secu <- recode(data$descr_dispo_secu, "Utilisation d'une ceintu
 #On fixe le format date pour la colonne "date"
 data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
 
-#On fixe la colonne "age" en tant que numérique
+#On fixe la colonne "age" en tant que integer
 data$age <- as.integer(data$age)
 
-#On fixe la colonne "an_nais" en tant que numérique
+#On fixe la colonne "an_nais" en tant que integer
 data$an_nais <- as.integer(data$an_nais)
 
-#On fixe la colonne "place" en tant que numérique
+#On fixe la colonne "place" en tant que integer
 data$place <- as.integer(data$place)
 
 
