@@ -1,7 +1,18 @@
 #lecture csv file "stat_acc_V3.csv"
 data <- read.csv("data/stat_acc_V3.csv", sep=";")
 
-#print les diffrentes valeurs de chaque colonne multimodale
+#--------------------------------------------------------------------------------------------------------------
+#-------------------------------------MODIF CAT VEHICULES + GRAVITE--------------------------------------------
+#--------------------------------------------------------------------------------------------------------------
+
+#On veut remplacer les valeurs de la colonne "descr_cat_veh" et "descr_grav" par des valeurs numériques
+#Afin de pouvoir mieux les exploiter par la suite
+#On récupère les valeurs uniques de chaque colonne et on les stocke dans un vecteur
+#On crée ensuite un dictionnaire clé valeur avec les valeurs trouvées dans le vecteur
+#On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+
+#print les diffrentes valeurs de chaque colonne multimodale pour voir les valeurs a remplacer
 # print(unique(data$descr_cat_veh))
 # print(unique(data$descr_grav))
 
@@ -11,6 +22,7 @@ old_descr_grav_values <- unique(data$descr_grav)
 
 #creation dictionnaire clé valeur avec les valeurs trouvées dans old_cat_veh_values
 cat_veh_list <- list("PL seul > 7,5T" = 14, "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque " = 10, "VL seul" = 07, "Autocar" = 38, "PL > 3,5T + remorque" = 15, "Cyclomoteur <50cm3" = 02, "Motocyclette > 125 cm3" = 33, "Tracteur routier + semi-remorque" = 17, "Tracteur agricole" = 21, "PL seul 3,5T <PTCA <= 7,5T" = 13, "Autobus" = 37, "Scooter > 50 cm3 et <= 125 cm3" = 32, "Train" = 39, "Scooter > 125 cm3" = 34, "Scooter < 50 cm3" = 30, "Voiturette (Quadricycle à moteur carrossé) (anciennement \"voiturette ou tricycle à moteur\")" = 03, "Autre véhicule" = 99, "Bicyclette" = 01, "Motocyclette > 50 cm3 et <= 125 cm3" = 31, "Engin spécial" = 20, "Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)" = 36, "Tramway" = 19, "Tracteur routier seul" = 16, "Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)" = 35)
+grav_values <- list("Indemne" = 1, "Tué" = 2, "Blessé hospitalisé" = 3, "Blessé léger" = 4)
 
 #boucle pour remplacer les valeurs de la colonne "descr_cat_veh" par les valeurs du dictionnaire correspondantes
 for (i in 1:length(data$descr_cat_veh)) {
@@ -21,19 +33,35 @@ for (i in 1:length(data$descr_cat_veh)) {
   }
 }
 
+#boucle pour remplacer les valeurs de la colonne "descr_grav" par les valeurs du dictionnaire correspondantes
+for (i in 1:length(data$descr_grav)) {
+  for (j in 1:length(grav_values)) {
+    if (data$descr_grav[i] == names(grav_values[j])) {
+      data$descr_grav[i] <- grav_values[[j]]
+    }
+  }
+}
+
 #---------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------MODIF CASES VIDES-----------------------------------------------
 #---------------------------------------------------------------------------------------------------------------
 
-#boucle pour remplacer les cases NULL par 10 dans la colonne "place"
+#boucle pour remplacer les cases NULL par 10 dans la colonne "place" (10 correspondant aux piétons)
 for (i in 1:length(data$place)) {
   if (data$place[i] == "NULL") {
     data$place[i] <- 10
   }
 }
 
-#recuperation des lignes avec "id_code_insee" commence par 97
-verif <- data[grepl("^97", data$id_code_insee),]
+#---------------------------------------------------------------------------------------------------------------
+#-----------------------------------------INVERSION LAT/LONG DOM TOM--------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à modifier les valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97 (DOM TOM)
+#Ces valeurs sont inversées dans le fichier csv
+#On récupère les lignes avec "id_code_insee" commence par 97
+#On inverse les valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97
+
 
 #inversion des valeurs de latitude et longitude pour les lignes avec "id_code_insee" commence par 97
 for(i in 1:length(data$latitude)) {
@@ -43,6 +71,15 @@ for(i in 1:length(data$latitude)) {
     data$longitude[i] <- temp
   }
 }
+
+#---------------------------------------------------------------------------------------------------------------
+#-------------------------------------------MODIF LAT/LONG NULLES-----------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à modifier les valeurs de latitude et longitude qui sont nulles par leurs valeurs correspondantes
+#On récupère les villes correspondant aux valeurs de latitude et longitude nulles
+#On crée une matrice pour stocker les valeurs de latitude et longitude correspondant aux villes de cities
+#On remplace les valeurs de latitude et longitude nulles par les valeurs de la matrice correspondantes
 
 
 #stockage des villes correspondant aux valeurs de lat et long nulles
@@ -64,9 +101,25 @@ for(i in 1:length(data$latitude)) {
   }
 }
 
+#---------------------------------------------------------------------------------------------------------------
+#----------------------------------------SUPPR AGE / AN_NAIS NULL-----------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à supprimer les lignes avec des valeurs nulles de "age" et "an_nais" car on ne peut pas les remplacer
+
 #suppression des lignes avec des valeurs nulles de "age" et "an_nais"
 data <- subset(data, data$age != "NULL")
 data <- subset(data, data$an_nais != "NULL")
+
+#---------------------------------------------------------------------------------------------------------------
+#----------------------------------------------MODIF LAT/LONG---------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+
+#On cherche à modifier les valeurs de latitude et longitude qui sont égales à 2009... par leurs valeurs correspondantes
+#On récupère les villes correspondant aux valeurs de latitude et longitude égales à 2009...
+#On stock une seule fois chaque ville ou data$latitude == 2009...
+#On stock les arrondissements de paris, de marsseille et de lyon dans 3 vecteurs
+#On remplace les valeurs de latitude et longitude égales à 2009... par les valeurs correspondantes dans les vecteurs
 
 
 #remplacement des longitudes et latitudes des villes avec des valeurs de latitude et longitude == 2009... par leur valeurs réelles
@@ -118,7 +171,9 @@ for(i in 1:length(data$latitude)) {
   }
 }
 
-
+#-------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------EXPORT CSV-------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------
 
 
 #export csv
