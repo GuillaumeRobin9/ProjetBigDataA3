@@ -7,11 +7,20 @@ library(dplyr)
 data <- read.csv("data/stat_acc_V3.csv", sep=";")
 
 #--------------------------------------------------------------------------------------------------------------
-#-------------------------------------MODIF COLONNES DATE ET HEURE---------------------------------------------
+#----------------------------------------------FIX FORMAT COLONNES---------------------------------------------
 #--------------------------------------------------------------------------------------------------------------
 
 #On fixe le format date pour la colonne "date"
 data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
+
+#On fixe la colonne "age" en tant que numérique
+data$age <- as.numeric(data$age)
+
+#On fixe la colonne "an_nais" en tant que numérique
+data$an_nais <- as.numeric(data$an_nais)
+
+#On fixe la colonne "place" en tant que numérique
+data$place <- as.numeric(data$place)
 
 #--------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------
