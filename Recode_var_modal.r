@@ -1,4 +1,5 @@
-install.packages("dplyr")
+#install dplyr package si il n'est pas installé sur la machine
+if (!require("dplyr")){install.packages("dplyr")}
 
 library(dplyr)
 
@@ -13,24 +14,42 @@ data <- read.csv("data/stat_acc_V3.csv", sep=";")
 #Afin de pouvoir mieux les exploiter par la suite
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
 
+# Catégorie de véhicule :
+# 14 – PL seul > 7,5T
+# 10 – VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque
+# 07 – VL seul
+# 38 – Autocar
+# 15 – PL > 3,5T + remorque
+# 02 – Cyclomoteur <50cm3
+# 33 – Motocyclette > 125 cm3
+# 17 – Tracteur routier + semi-remorque
+# 21 – Tracteur agricole
+# 13 – PL seul 3,5T <PTCA <= 7,5T
+# 37 – Autobus
+# 32 – Scooter > 50 cm3 et <= 125 cm3
+# 39 – Train
+# 34 – Scooter > 125 cm3
+# 30 – Scooter < 50 cm3
+# 03 – Voiturette (Quadricycle à moteur carrossé) (anciennement "voiturette ou tricycle à moteur")
+# 99 – Autre véhicule
+# 01 – Bicyclette
+# 31 – Motocyclette > 50 cm3 et <= 125 cm3
+# 20 – Engin spécial
+# 36 – Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)
+# 19 – Tramway
+# 16 – Tracteur routier seul
+# 35 – Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)
 
-#print les diffrentes valeurs de chaque colonne multimodale pour voir les valeurs a remplacer
-# print(unique(data$descr_cat_veh))
-# print(unique(data$descr_grav))
+# Gravité de l'accident :
+# 1 – Indemne
+# 2 – Tué
+# 3 – Blessé hospitalisé
+# 4 – Blessé léger
 
-#creation d'un vecteur de valeurs a remplacer a partir des valeurs de unique(data$colonne)
-old_cat_veh_values <- unique(data$descr_cat_veh)
-old_descr_grav_values <- unique(data$descr_grav)
-
-#creation dictionnaire clé valeur avec les valeurs trouvées dans old_cat_veh_values
-cat_veh_list <- list("PL seul > 7,5T" = 14, "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque " = 10, "VL seul" = 07, "Autocar" = 38, "PL > 3,5T + remorque" = 15, "Cyclomoteur <50cm3" = 02, "Motocyclette > 125 cm3" = 33, "Tracteur routier + semi-remorque" = 17, "Tracteur agricole" = 21, "PL seul 3,5T <PTCA <= 7,5T" = 13, "Autobus" = 37, "Scooter > 50 cm3 et <= 125 cm3" = 32, "Train" = 39, "Scooter > 125 cm3" = 34, "Scooter < 50 cm3" = 30, "Voiturette (Quadricycle à moteur carrossé) (anciennement \"voiturette ou tricycle à moteur\")" = 03, "Autre véhicule" = 99, "Bicyclette" = 01, "Motocyclette > 50 cm3 et <= 125 cm3" = 31, "Engin spécial" = 20, "Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)" = 36, "Tramway" = 19, "Tracteur routier seul" = 16, "Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)" = 35)
-grav_values <- list("Indemne" = 1, "Tué" = 2, "Blessé hospitalisé" = 3, "Blessé léger" = 4)
 
 data$descr_cat_veh <- recode(data$descr_cat_veh, "PL seul > 7,5T" = 14, "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque " = 10, "VL seul" = 07, "Autocar" = 38, "PL > 3,5T + remorque" = 15, "Cyclomoteur <50cm3" = 02, "Motocyclette > 125 cm3" = 33, "Tracteur routier + semi-remorque" = 17, "Tracteur agricole" = 21, "PL seul 3,5T <PTCA <= 7,5T" = 13, "Autobus" = 37, "Scooter > 50 cm3 et <= 125 cm3" = 32, "Train" = 39, "Scooter > 125 cm3" = 34, "Scooter < 50 cm3" = 30, "Voiturette (Quadricycle à moteur carrossé) (anciennement \"voiturette ou tricycle à moteur\")" = 03, "Autre véhicule" = 99, "Bicyclette" = 01, "Motocyclette > 50 cm3 et <= 125 cm3" = 31, "Engin spécial" = 20, "Quad lourd > 50 cm3 (Quadricycle à moteur non carrossé)" = 36, "Tramway" = 19, "Tracteur routier seul" = 16, "Quad léger <= 50 cm3 (Quadricycle à moteur non carrossé)" = 35)
 
 data$descr_grav <- recode(data$descr_grav, "Indemne" = 1, "Tué" = 2, "Blessé hospitalisé" = 3, "Blessé léger" = 4)
-
-
 
 #---------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------MODIF CASES VIDES-----------------------------------------------
@@ -51,6 +70,10 @@ for (i in 1:length(data$place)) {
 #On cherche à remplacer les valeurs de la colonne "descr_agglo" par des valeurs numériques correspondantes
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
 
+# Agglomération :
+# 1 – Hors agglomération
+# 2 – En agglomération
+
 data$descr_agglo <- recode(data$descr_agglo, "Hors agglomération" = 1, "En agglomération" = 2)
 
 
@@ -61,6 +84,17 @@ data$descr_agglo <- recode(data$descr_agglo, "Hors agglomération" = 1, "En aggl
 #On cherche à remplacer les valeurs de la colonne "descr_atm" par des valeurs numériques correspondantes
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
 
+# Conditions atmosphériques :
+# 1 – Normale
+# 2 – Pluie légère
+# 3 – Pluie forte
+# 4 – Neige - grêle
+# 5 – Brouillard - fumée
+# 6 – Vent fort - tempête
+# 7 – Temps éblouissant
+# 8 – Temps couvert
+# 9 – Autre 
+
 data$descr_athmo <- recode(data$descr_athmo, "Normale" = 1, "Pluie légère" = 2, "Pluie forte" = 3, "Neige – grêle" = 4, "Brouillard – fumée" = 5, "Vent fort – tempête" = 6, "Temps éblouissant" = 7, "Temps couvert" = 8, "Autre" = 9)
 
 #---------------------------------------------------------------------------------------------------------------
@@ -69,6 +103,13 @@ data$descr_athmo <- recode(data$descr_athmo, "Normale" = 1, "Pluie légère" = 2
 
 #On cherche à remplacer les valeurs de la colonne "descr_lum" par des valeurs numériques correspondantes
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
+
+# Lumière : conditions d’éclairage dans lesquelles l'accident s'est produit :
+# 1 – Plein jour
+# 2 – Crépuscule ou aube
+# 3 – Nuit sans éclairage public
+# 4 – Nuit avec éclairage public non allumé
+# 5 – Nuit avec éclairage public allumé 
 
 data$descr_lum <- recode(data$descr_lum, "Plein jour" = 1, "Crépuscule ou aube" = 2, "Nuit sans éclairage public" = 3, "Nuit avec éclairage public non allumé" = 4, "Nuit avec éclairage public allumé" = 5)
 
@@ -79,6 +120,16 @@ data$descr_lum <- recode(data$descr_lum, "Plein jour" = 1, "Crépuscule ou aube"
 #On cherche à remplacer les valeurs de la colonne "descr_etat_surf" par des valeurs numériques correspondantes
 #On remplace ensuite les valeurs de la colonne par les valeurs du dictionnaire correspondantes
 
+# Etat de la surface :
+# 1 – Normale
+# 2 – Mouillée
+# 3 – Flaques
+# 4 – Inondée
+# 5 – Enneigée
+# 6 – Boue
+# 7 – Verglacée
+# 8 – Corps gras – huile
+# 9 – Autre 
 
 #utilisation de recode pour remplacer les valeurs de la colonne "descr_etat_surf" par les valeurs du dictionnaire correspondantes
 data$descr_etat_surf <- recode(data$descr_etat_surf, "Normale" = 1, "Mouillée" = 2, "Flaques" = 3, "Inondée" = 4, "Enneigée" = 5, "Boue" = 6, "Verglacée" = 7, "Corps gras – huile" = 8, "Autre" = 9)
@@ -178,7 +229,6 @@ arr_long_marseille <- c("MARSEILLE 15"=5.372519, "MARSEILLE 14"=5.372519, "MARSE
 arr_lat_marseille <- c("MARSEILLE 15"=43.296482, "MARSEILLE 14"=43.296482, "MARSEILLE 13"=43.296482, "MARSEILLE 12"=43.296482, "MARSEILLE 11"=43.296482, "MARSEILLE 10"=43.296482, "MARSEILLE 09"=43.296482, "MARSEILLE 08"=43.296482, "MARSEILLE 07"=43.296482, "MARSEILLE 06"=43.296482, "MARSEILLE 05"=43.296482, "MARSEILLE 04"=43.296482, "MARSEILLE 03"=43.296482, "MARSEILLE 02"=43.296482, "MARSEILLE 01"=43.296482)
 
 
-
 #modification des valeurs de latitude et longitude de Paris
 
 for(i in 1:length(data$latitude)) {
@@ -211,6 +261,54 @@ for(i in 1:length(data$latitude)) {
     }
   }
 }
+
+#-------------------------------------------------------------------------------------------------------------
+#--------------------------------------------MODIFICATION DESCR INTERSEC--------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+
+# Intersection :
+# 1 – Hors intersection
+# 2 – Intersection en X
+# 3 – Intersection en T
+# 4 – Intersection en Y
+# 5 – Intersection à plus de 4 branches
+# 6 – Giratoire
+# 7 – Place
+# 8 – Passage à niveau
+# 9 – Autre intersection 
+
+data$description_intersection <- recode(data$description_intersection, "Hors intersection" = 1, "Intersection en X" = 2, "Intersection en T" = 3, "Intersection en Y" = 4, "Intersection à plus de 4 branches" = 5, "Giratoire" = 6, "Place" = 7, "Passage à niveau" = 8, "Autre intersection" = 9)
+
+
+#-------------------------------------------------------------------------------------------------------------
+#----------------------------------------------MODIFICATION MOTIF TRAJ----------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+
+# Motif du déplacement au moment de l’accident :
+# 0 – Non renseigné
+# 1 – Domicile – travail
+# 2 – Domicile – école
+# 3 – Courses – achats
+# 4 – Utilisation professionnelle
+# 5 – Promenade – loisirs
+# 9 – Autre 
+
+data$descr_motif_traj <- recode(data$descr_motif_traj, "Non renseigné" = 0, "Domicile – travail" = 1, "Domicile – école" = 2, "Courses – achats" = 3, "Utilisation professionnelle" = 4, "Promenade – loisirs" = 5, "Autre" = 9)
+
+#-------------------------------------------------------------------------------------------------------------
+#----------------------------------------------MODIFICATION DESCR COL-----------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+
+# Collision :
+# 1 – Deux véhicules - Frontale
+# 2 – Deux véhicules – Par l’arrière
+# 3 – Deux véhicules – Par le coté
+# 4 – Trois véhicules et plus – En chaîne
+# 5 – Trois véhicules et plus – Collisions multiples
+# 6 – Autre collision
+# 7 – Sans collision
+
+data$descr_type_col <- recode(data$descr_type_col, "Deux véhicules - Frontale" = 1, "Deux véhicules – Par l’arrière" = 2, "Deux véhicules – Par le coté" = 3, "Trois véhicules et plus – En chaîne" = 4, "Trois véhicules et plus – Collisions multiples" = 5, "Autre collision" = 6, "Sans collision" = 7)
 
 #-------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------EXPORT CSV-------------------------------------------------
