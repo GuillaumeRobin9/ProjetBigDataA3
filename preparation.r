@@ -11,7 +11,7 @@ data <- read.csv("data/stat_acc_V3.csv", sep=";")
 #--------------------------------------------------------------------------------------------------------------
 
 #On fixe le format date pour la colonne "date"
-data$date <- as.POSIXct(data$date, format = "%d/%m/%Y %H:%M")
+data$date <- as.POSIXct(data$date, format = "%Y-%m-%d %H:%M")
 
 
 #--------------------------------------------------------------------------------------------------------------
@@ -314,9 +314,33 @@ data$descr_motif_traj <- recode(data$descr_motif_traj, "Non renseigné" = 0, "Do
 data$descr_type_col <- recode(data$descr_type_col, "Deux véhicules - Frontale" = 1, "Deux véhicules – Par l’arrière" = 2, "Deux véhicules – Par le coté" = 3, "Trois véhicules et plus – En chaîne" = 4, "Trois véhicules et plus – Collisions multiples" = 5, "Autre collision" = 6, "Sans collision" = 7)
 
 #-------------------------------------------------------------------------------------------------------------
+#----------------------------------------------MODIFICATION DISPO SECU----------------------------------------
+#-------------------------------------------------------------------------------------------------------------
+# Dispositif de sécurité :
+# 1 – Utilisation d'une ceinture de sécurité 
+# 2 – Utilisation d'un casque 
+# 3 – Présence d'une ceinture de sécurité - Utilisation non déterminable
+# 4 – Présence de ceinture de sécurité non utilisée 
+# 5 – Autre - Non déterminable
+# 6 – Présence d'un équipement réfléchissant non utilisé
+# 7 – Présence d'un casque non utilisé 
+# 8 – Utilisation d'un dispositif enfant
+# 9 – Présence d'un casque - Utilisation non déterminable
+# 10 – Présence dispositif enfant - Utilisation non déterminable
+# 11 – Autre - Utilisé
+# 12 – Utilisation d'un équipement réfléchissant 
+# 13 – Autre - Non utilisé
+# 14 – Présence équipement réfléchissant - Utilisation non déterminable
+# 15 – Présence d'un dispositif enfant non utilisé
+
+data$descr_dispo_secu <- recode(data$descr_dispo_secu, "Utilisation d'une ceinture de sécurité " = 1, "Utilisation d'un casque " = 2, "Présence d'une ceinture de sécurité - Utilisation non déterminable" = 3, "Présence de ceinture de sécurité non utilisée " = 4, "Autre - Non déterminable" = 5, "Présence d'un équipement réfléchissant non utilisé" = 6, "Présence d'un casque non utilisé " = 7, "Utilisation d'un dispositif enfant" = 8, "Présence d'un casque - Utilisation non déterminable" = 9, "Présence dispositif enfant - Utilisation non déterminable" = 10, "Autre - Utilisé" = 11, "Utilisation d'un équipement réfléchissant " = 12, "Autre - Non utilisé" = 13, "Présence équipement réfléchissant - Utilisation non déterminable" = 14, "Présence d'un dispositif enfant non utilisé" = 15)
+
+
+
+#-------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------EXPORT CSV-------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------
 
 
 #export csv
-write.table(data, file = "data/stat_acc_V3.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
+write.table(data, file = "data/stat_acc_V3_cleared.csv", sep = ";", row.names = FALSE, col.names = TRUE, quote = FALSE)
