@@ -45,25 +45,41 @@ correspondance_regions$AnciensNom <- toupper(trimws(correspondance_regions$Ancie
 
 merged_data <- left_join(merged_data, correspondance_regions, by = c("region" = "AnciensNom"))
 
+# au lieu de faire la moyenne des accidents calcul plutot un taux d'accident en prenant le nombre d'accident grave sur nb d'accident total sachant 
+# accident grave sur accident total
+# dans le fichier stat_acc_V3_cleared.csv colonne descr_grav
+# 1 indemme 
+# 2 tué
+# 3 blessé hospitalisé
+# 4 blessé léger
+# sum blessé hospitalisé + tué / sum accident total
 
 # Sum accident by region
 accidents_region <- merged_data %>%
   group_by(NouveauNom) %>%
-  summarise(mean_gravite = mean(descr_grav)) %>%
+  summarise(total_accidents = n(),
+            grave_accidents = sum(descr_grav %in% c(2, 3)),
+            taux_accidents_graves = grave_accidents / total_accidents) %>%
   ungroup()
+
+
+
+
+# average accident by region
+#accidents_region <- merged_data %>%
+#  group_by(NouveauNom) %>%
+#  summarise(mean_gravite = mean(descr_grav)) %>%
+#  ungroup()
 
 region_geojson <- merge(region_geojson, accidents_region, by.x = "nom", by.y = "NouveauNom", all.x = TRUE)
 # if NA --> 0
-region_geojson$mean_gravite[is.na(region_geojson$mean_gravite)] <- 0
-
-
-
-
+#region_geojson$mean_gravite[is.na(region_geojson$mean_gravite)] <- 0
+region_geojson$grave_accidents[is.na(region_geojson$taux_accidents_graves)] <- 0
 # Color
-thresholds <- c(0, 1, 2, 3, 4,5)
+thresholds <- c(0, 0.2, 0.4, 0.6, 0.8,1)
 colors <- c("#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000")
-color_category <- cut(region_geojson$mean_gravite, breaks = thresholds, labels = colors)
-
+#color_category <- cut(region_geojson$mean_gravite, breaks = thresholds, labels = colors)
+color_category <- cut(region_geojson$taux_accidents_graves, breaks = thresholds, labels = colors)
 # Create map leaflet
 map <- leaflet() %>%
   addTiles() %>%
@@ -71,12 +87,14 @@ map <- leaflet() %>%
   addPolygons(data = region_geojson,
               fillColor = ~color_category,
               color = "black", fillOpacity = 0.5,
-              popup = ~paste(nom, sprintf("%.2f", mean_gravite), "gravité", sep = ": "),
-              highlightOptions = highlightOptions(weight = 2, fillOpacity = 0.8))
+              popup = ~paste(nom, sprintf("%.2f", taux_accidents_graves), "gravité", "(", grave_accidents, "accidents graves)", sep = ": "),
+              highlightOptions = highlightOptions(weight = 0.5, fillOpacity = 0.4))
 
 
+        
+            
 # Add legend
-map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0", "1", "2", "3", "4"), title = "Accidents")
+map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0", "0.2", "0.4", "0.6", "0.8"), title = "Accidents")
 
 print(map)
 
