@@ -75,8 +75,8 @@ department_geojson$grave_accidents[is.na(department_geojson$grave_accidents)] <-
 
 
 # Color mapping
-thresholds <- c(-1, 0, 0.2, 0.4, 0.6, 0.8,1)
-colors <- c("#FFFFFF","#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000")
+thresholds <- c(-1, 0.1, 0.2, 0.3, 0.4,0.5,0.6,0.7,1)
+colors <- c("#00FF00","#00ff9d","#0000FF","#8400ff" ,"#FFFF00", "#FFA500", "#FF0000","#000000")
 color_category <- cut(department_geojson$taux_accidents_graves, breaks = thresholds, labels = colors)
 
 # Create Leaflet map
@@ -89,7 +89,7 @@ map <- leaflet() %>%
               popup = ~paste(nom, sprintf("%.2f", taux_accidents_graves), "gravité", "(", grave_accidents, "accidents graves)", sep = ": "),
               highlightOptions = highlightOptions(weight = 2, fillOpacity = 0.8))
 
-map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0","0.1", "0.2", "0.4", "0.6", "0.8"), title = "Accidents")
+map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0", "0.1", "0.2", "0.3", "0.4","0.5","0.6","1"), title = "Accidents")
 
 
 print(map)
