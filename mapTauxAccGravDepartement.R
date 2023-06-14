@@ -37,34 +37,47 @@ merged_data <- left_join(stat_acc_V3_cleared, correspondance_region, by = c("id_
 merged_data$region <- gsub("\\[\"|\"\\]", "", merged_data$region)
 merged_data$region <- toupper(trimws(merged_data$region))
 
+
+
+# au lieu de faire la moyenne des accidents calcul plutot un taux d'accident en prenant le nombre d'accident grave sur nb d'accident total sachant 
+# accident grave sur accident total
+# dans le fichier stat_acc_V3_cleared.csv colonne descr_grav
+# 1 indemme 
+# 2 tué
+# 3 blessé hospitalisé
+# 4 blessé léger
+# sum blessé hospitalisé + tué / sum accident total
 # summ of gravity by department
 accidents_departement <- merged_data %>%
   group_by(Département) %>%
-  summarise(mean_gravite = mean(descr_grav)) %>%
+  summarise(total_accidents = as.numeric(n()),
+            grave_accidents = as.numeric(sum(descr_grav %in% c(2, 3))),
+            taux_accidents_graves = grave_accidents / total_accidents) %>%
   ungroup()
+
 
 
 # Special character normalization
 accidents_departement$Département <- toupper(gsub("\\['|'\\]", "", accidents_departement$Département))
-department_geojson$nom <- str_replace(department_geojson$nom, "\\W", "")
+#accidents_departement$Département <- toupper(accidents_departement$Département)
 department_geojson$nom <- iconv(department_geojson$nom, "UTF-8", "ASCII//TRANSLIT")
 department_geojson$nom <- stri_unescape_unicode(department_geojson$nom)
 department_geojson$nom <- str_to_title(department_geojson$nom)
+department_geojson$nom <- gsub("\\['|'\\]", "", department_geojson$nom)
 department_geojson$nom <- toupper(department_geojson$nom)
 
-str(accidents_departement)
-str(department_geojson)
 
 # Merge data 
 department_geojson <- merge(department_geojson, accidents_departement, by.x = "nom", by.y = "Département", all.x = TRUE)
 # if NA --> 0
-department_geojson$mean_gravite[is.na(department_geojson$mean_gravite)] <- 0
+department_geojson$taux_accidents_graves[is.na(department_geojson$taux_accidents_graves)] <- 0
+department_geojson$grave_accidents[is.na(department_geojson$grave_accidents)] <- 0
 
 
 # Color mapping
-thresholds <- c(0, 1, 2, 3, 4,5)
-colors <- c("#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000")
-color_category <- cut(department_geojson$mean_gravite, breaks = thresholds, labels = colors)
+thresholds <- c(-1, 0, 0.2, 0.4, 0.6, 0.8,1)
+colors <- c("#FFFFFF","#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000")
+color_category <- cut(department_geojson$taux_accidents_graves, breaks = thresholds, labels = colors)
 
 # Create Leaflet map
 map <- leaflet() %>%
@@ -73,12 +86,10 @@ map <- leaflet() %>%
   addPolygons(data = department_geojson,
               fillColor = ~color_category,
               color = "black", fillOpacity = 0.5,
-              popup = ~paste(nom, sprintf("%.2f", mean_gravite), "gravité", sep = ": "),
+              popup = ~paste(nom, sprintf("%.2f", taux_accidents_graves), "gravité", "(", grave_accidents, "accidents graves)", sep = ": "),
               highlightOptions = highlightOptions(weight = 2, fillOpacity = 0.8))
 
-
-
-map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0", "1", "2", "3", "4"), title = "Accidents")
+map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0","0.1", "0.2", "0.4", "0.6", "0.8"), title = "Accidents")
 
 
 print(map)
