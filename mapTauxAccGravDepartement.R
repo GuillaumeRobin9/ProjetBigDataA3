@@ -118,6 +118,6 @@ print(map)
 
 ## save html to png
 saveWidget(map, "temp.html", selfcontained = FALSE)
-webshot("temp.html", file = "Rplot.png",
+webshot("temp.html", file = "image/mapTauxAccGravDepart.png",
         cliprect = "viewport")
 
