@@ -6,9 +6,10 @@ library(ggplot2)
 library(lubridate)
 
 # Lecture du CSV
-data <- readLines("data/stat_acc_V3_cleared.csv", encoding = "latin1")
+data <- readLines("data/stat_acc_V3.csv", encoding = "latin1")
 data <- iconv(data, from = "latin1", to = "UTF-8")
 data <- read.csv(text = data, sep = ";")
+
 
 # ----------------
 # ---------------------------------------------------------------- [ REPRESENTATIONS GRAPHIQUES ]
@@ -74,7 +75,7 @@ ggplot(data = accidents_par_gravite, aes(x = descr_grav, y = count)) +
 
 
 # Calcul du nombre d'accidents par tranches d'heure
-heures <- format(data$date, "%H")
+heures <- hour(data$date)
 accidents_par_heure <- as.data.frame(table(heures))
 
 # Renommer les colonnes pour correspondre à votre dataframe
@@ -95,11 +96,23 @@ ggplot(data = accidents_par_heure, aes(x = heure, y = count)) +
 # Calcul du nombre d'accidents par ville
 accidents_par_ville <- as.data.frame(table(data$ville))
 
+# Sélection du top 10 des ville savec le plus d'accidents
+top_10_villes <- head(accidents_par_ville[order(accidents_par_ville$Freq, decreasing = TRUE), ], 10)
+
 # Renommer les colonnes pour correspondre à votre dataframe
 names(accidents_par_ville) <- c("ville", "count")
 
 # Création du diagramme à barres avec étiquettes
 ggplot(data = accidents_par_ville, aes(x = ville, y = count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = count), vjust = -0.3, size = 3.5) +
+  theme_minimal()
+
+# Renommer les colonnes pour correspondre à votre dataframe
+names(top_10_villes) <- c("ville", "count")
+
+# Création du diagramme pour le top 10 des villes avec le plus d'accidents
+ggplot(data = top_10_villes, aes(x = ville, y = count)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_text(aes(label = count), vjust = -0.3, size = 3.5) +
   theme_minimal()
