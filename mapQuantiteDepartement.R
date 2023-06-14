@@ -39,16 +39,19 @@ accidents_departement <- merged_data %>%
 
 
 # Special character and other things fix
+
 accidents_departement$Département <- toupper(gsub("\\['|'\\]", "", accidents_departement$Département))
-department_geojson$nom <- str_replace(department_geojson$nom, "\\W", "")
+#accidents_departement$Département <- toupper(accidents_departement$Département)
 department_geojson$nom <- iconv(department_geojson$nom, "UTF-8", "ASCII//TRANSLIT")
 department_geojson$nom <- stri_unescape_unicode(department_geojson$nom)
 department_geojson$nom <- str_to_title(department_geojson$nom)
+department_geojson$nom <- gsub("\\['|'\\]", "", department_geojson$nom)
 department_geojson$nom <- toupper(department_geojson$nom)
-
 
 department_geojson <- merge(department_geojson, accidents_departement, by.x = "nom", by.y = "Département", all.x = TRUE)
 
+#str(department_geojson)
+str(accidents_departement$Département)
 
 
 # if NA --> 0 
@@ -56,8 +59,8 @@ department_geojson$total_accidents[is.na(department_geojson$total_accidents)] <-
 
 
 # color
-thresholds <- c(0, 3000, 6000, 9000, 12000, 15000, Inf)
-colors <- c("#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000", "#000000")
+thresholds <- c(-1, 0, 300, 600, 900, 1200, 1500, Inf)
+colors <- c("#FFFFFF","#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#FF0000", "#000000")
 color_category <- cut(department_geojson$total_accidents, breaks = thresholds, labels = colors)
 
 # Create leaflet map
@@ -71,7 +74,7 @@ map <- leaflet() %>%
               highlightOptions = highlightOptions(weight = 2, fillOpacity = 0.8))
 
 # add legend
-map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0", "3000", "6000", "9000", "12000", "16000+"), title = "Accidents")
+map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0","1", "300", "600", "900", "1200", "1600+"), title = "Accidents")
 
 print(map)
 
