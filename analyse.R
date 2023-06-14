@@ -8,7 +8,7 @@ library(lubridate)
 library(caret)
 
 # Lecture du CSV
-data <- readLines("data/stat_acc_V3.csv", encoding = "latin1")
+data <- readLines("data/stat_acc_V3_cleared.csv", encoding = "latin1")
 data <- iconv(data, from = "latin1", to = "UTF-8")
 data <- read.csv(text = data, sep = ";")
 
