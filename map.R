@@ -1,7 +1,7 @@
 library(geojsonio)
 department_geojson <- geojson_read("data/regions.geojson", what = "sp")
 department_geojson <- geojson_read("data/departements.geojson", what = "sp")
-data <- read.csv("data/stat_acc_V3.csv", sep = ";")
+data <- read.csv("data/stat_acc_V3_cleared.csv", sep = ";")
 
 # ---------------------Quantité d'accidents ----------------------------
 # By regions 
