@@ -104,6 +104,9 @@ map <- addLegend(map, position = "bottomright", colors = colors, labels = c("0",
 
 # Affichage de la carte
 print(map)
-
+## save html to png
+saveWidget(map, "temp.html", selfcontained = FALSE)
+webshot("temp.html", file = "image/mapQteAccGravRegion.png",
+        cliprect = "viewport")
 
 
