@@ -1,4 +1,4 @@
-data <- read.csv("data/stat_acc_V3.csv", sep = ";")
+data <- read.csv("data/stat_acc_V3_cleared.csv", sep = ";")
 
 # Histograme quantité d’accidents en fonction des tranches d’âges
 age <- as.numeric(data$age) # age = char -> numeric

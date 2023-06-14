@@ -7,10 +7,10 @@ if (!require(leaflet)) {
 if (!require(dplyr)) {
   install.packages("dplyr")
 }
-if (!require(dplyr)) {
+if (!require(stringr)) {
   install.packages("stringr")
 }
-if (!require(dplyr)) {
+if (!require(stringi)) {
   install.packages("stringi")
 }
 library(sf)
