@@ -17,3 +17,5 @@ accidents_par_100k$Gravite_par_100k <- accidents_par_100k$Nombre_Accidents / (ac
 #only needed columns
 accidents_par_100k <- accidents_par_100k[, c("Nombre_Accidents", "Gravite_par_100k", "region")]
 print(accidents_par_100k)
+
+
