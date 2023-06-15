@@ -11,8 +11,12 @@ data$date <- as.Date(data$date)
 data$month <- format(data$date, "%b") # get month
 monthly_avg <- aggregate(data$Num_Acc, by = list(data$month), FUN = length) # get avg
 colnames(monthly_avg) <- c("Month", "AccidentCount")
-monthly_avg <- monthly_avg[order(monthly_avg$Month), ] # sort by month
+monthly_avg <- monthly_avg[order(monthly_avg$Month, month_order), ] # sort by month and year
 barplot(monthly_avg$AccidentCount, names.arg = monthly_avg$Month, main = "Moyenne mensuelle des accidents",  xlab = "Mois", ylab = "Nombre d'accidents", col = "blue", border = "red", breaks = 10)
 
 
 #df2 <- df[order(data$date, decreasing=TRUE),]
+
+
+
+
