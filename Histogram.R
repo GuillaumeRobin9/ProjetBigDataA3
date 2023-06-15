@@ -16,8 +16,6 @@ monthly_avg <- monthly_avg[order(monthly_avg$Month, month_order), ] # sort by mo
 barplot(monthly_avg$AccidentCount, names.arg = monthly_avg$Month, main = "Moyenne mensuelle des accidents",  xlab = "Mois", ylab = "Nombre d'accidents", col = "blue", border = "red", breaks = 10)
 
 
-#df2 <- df[order(data$date, decreasing=TRUE),]
-
 
 
 
