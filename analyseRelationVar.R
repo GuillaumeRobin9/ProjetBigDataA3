@@ -64,14 +64,6 @@ test_chi2 <- chisq.test(table_croisee)
 # Afficher les résultats du test
 print(test_chi2)
 
-# ---------- Interprétation
-
-# La statistique du chi2 élevée (14992) indique une différence significative entre les variables descr_cat_veh et descr_grav.
-# Les degrés de liberté (69) représentent le nombre de catégories moins 1 pour chaque variable. Dans ce cas, il y a 69 degrés de liberté, ce qui est cohérent avec la taille du tableau croisé.
-# La valeur p très faible (< 2.2e-16) suggère que l'association entre les variables est statistiquement significative. La probabilité d'obtenir une telle différence importante par hasard est extrêmement faible.
-# En conclusion, nous pouvons rejeter l'hypothèse nulle d'indépendance entre les variables descr_cat_veh et descr_grav. Les résultats suggèrent qu'il existe une relation significative entre ces deux variables.
-
-# ---------- 
 
 
 # deux variables : age et descr_grav
@@ -91,14 +83,7 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
 
-# La statistique du chi2 élevée (4289.5) indique une différence significative entre les variables considérées dans le tableau croisé.
-# Les degrés de liberté (297) représentent le nombre de catégories moins 1 pour chaque variable dans le tableau croisé. Dans ce cas, il y a 297 degrés de liberté, ce qui est cohérent avec la taille du tableau croisé.
-# La valeur p très faible (< 2.2e-16) suggère que l'association entre les variables est statistiquement significative. La probabilité d'obtenir une telle différence importante par hasard est extrêmement faible.
-# En conclusion, nous pouvons rejeter l'hypothèse nulle d'indépendance entre les variables considérées dans le tableau croisé. Les résultats indiquent qu'il existe une relation significative entre ces variables.
-
-# ----------
 
 # Lumière : conditions d’éclairage dans lesquelles l'accident s'est produit :
 # 1 – Plein jour
@@ -124,14 +109,9 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 1868.8, df = 12, p-value < 2.2e-16
 # Conclusion : corrélation forte entre condition lumineuses et gravité de l'accident
 
-# ----------
+
 
 # deux variables : heure et descr_grav
 
@@ -158,14 +138,9 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 1868.8, df = 12, p-value < 2.2e-16
 # Conclusion : corrélation forte entre condition lumineuses et gravité de l'accident
 
-# ----------
+
 
 # deux variables : descr_dispo_secu et descr_grav
 
@@ -202,14 +177,8 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 18907, df = 42, p-value < 2.2e-16
 # Conclusion : corrélation forte entre dispositif de sécurité et gravité de l'accident
 
-# ----------
 
 # deux variables : descr_athmo et descr_grav
 
@@ -240,14 +209,8 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 311.49, df = 24, p-value < 2.2e-16
 # Conclusion : corrélation forte entre conditions athmosphériques et gravité de l'accident
 
-# ----------
 
 # deux variables : descr_type_col et descr_grav
 
@@ -276,14 +239,8 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 4843, df = 18, p-value < 2.2e-16
 # Conclusion : corrélation forte entre type de collision et gravité de l'accident
 
-# ----------
 
 # deux variables : description_intersection et descr_grav
 
@@ -314,11 +271,5 @@ test_chi2 <- chisq.test(table_croisee)
 print(test_chi2)
 
 
-# ---------- Interprétation
-
-# Pearson's Chi-squared test
-# data:  table_croisee
-# X-squared = 1494.1, df = 24, p-value < 2.2e-16
 # Conclusion : corrélation forte entre description_intersection et gravité de l'accident
 
-# ----------
