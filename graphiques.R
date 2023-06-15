@@ -75,7 +75,7 @@ accidents_par_gravite <- as.data.frame(table(data$descr_grav))
 # Renommer les colonnes pour correspondre à votre dataframe
 names(accidents_par_gravite) <- c("descr_grav", "count")
 
-legende <- c("Indemne", "Tué", "Blessé hospitalisé", "Blessé léger")
+legende <- c("Blessé hospitalisé", "Blessé léger", "Indemne", "Tué")
 
 # Création du diagramme camembert avec étiquettes en conservant les accents de la légende
 ggplot(data = accidents_par_gravite, aes(x = "", y = count, fill = descr_grav)) +
