@@ -25,7 +25,6 @@ data$mois <- as.POSIXlt(data$date)$mon + 1
 
 # Calcul du nombre d'accidents par mois
 accidents_par_mois <- aggregate(data$Num_Acc, by = list(mois = data$mois), FUN = length)
-print(accidents_par_mois)
 
 # Calcul de la régression
 regression_mois <- lm(accidents_par_mois$x ~ accidents_par_mois$mois)
@@ -35,7 +34,6 @@ summary(regression_mois)
 
 # Tracer la courbe de régression
 ggplot(data = accidents_par_mois, aes(x = mois, y = x)) +
-  #geom_point(color = "blue") +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_smooth(method = "lm", se = FALSE, color = "red", formula = y ~ x) +
   labs(x = "Mois", y = "Nombre d'accidents") +
@@ -152,7 +150,10 @@ regression_cumul_mois <- lm(accidents_cumul_mois ~ accidents_par_mois$mois)
 summary(regression_cumul_mois)
 
 # Création du data.frame pour tracer la courbe de régression
-plot_data <- data.frame(mois = unique(accidents_cumul_mois), accidents_cumul_mois = accidents_cumul_mois)
+plot_data <- data.frame(mois = accidents_par_mois$mois, accidents_cumul_mois = accidents_cumul_mois)
+
+# Calcul du nombre d'accidents par mois
+#accidents_par_mois <- aggregate(data$Num_Acc, by = list(mois = data$mois), FUN = length)
 
 # Tracer la courbe de régression
 ggplot(data = plot_data, aes(x = mois, y = accidents_cumul_mois)) +
@@ -190,7 +191,8 @@ regression_semaine <- lm(accidents_cumul_semaine ~ accidents_par_semaine$semaine
 summary(regression_semaine)
 
 # Création du data.frame pour tracer la courbe de régression
-plot_data <- data.frame(semaine = unique(accidents_cumul_semaine), accidents_cumul_semaine = accidents_cumul_semaine)
+#plot_data <- data.frame(semaine = unique(accidents_cumul_semaine), accidents_cumul_semaine = accidents_cumul_semaine)
+plot_data <- data.frame(semaine = accidents_par_semaine$semaine, accidents_cumul_semaine = accidents_cumul_semaine)
 
 # Tracer la courbe de régression
 ggplot(data = plot_data, aes(x = semaine, y = accidents_cumul_semaine)) +
@@ -198,7 +200,7 @@ ggplot(data = plot_data, aes(x = semaine, y = accidents_cumul_semaine)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_smooth(method = "lm", se = FALSE, color = "red", formula = y ~ x) +
   labs(x = "Semaines", y = "Nombre d'accidents") +
-  ggtitle("Régression des accidents par semaines") +
+  ggtitle("Régression des accidents cumulés par semaines") +
   theme_minimal()
 
 # -- Interprétation
