@@ -77,16 +77,16 @@ names(accidents_par_gravite) <- c("descr_grav", "count")
 
 legende <- c("Indemne", "Tué", "Blessé hospitalisé", "Blessé léger")
 
-# Création du diagramme camembert avec étiquettes
+# Création du diagramme camembert avec étiquettes en conservant les accents de la légende
 ggplot(data = accidents_par_gravite, aes(x = "", y = count, fill = descr_grav)) +
   geom_bar(stat = "identity", width = 1) +
   geom_text(aes(label = count), position = position_stack(vjust = 0.5), size = 3.5) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set2") +
+  coord_polar("y", start = 0) +
+  scale_fill_discrete(labels = legende) +
   labs(x = "", y = "", title = "Répartition des accidents selon la gravité") +
   theme_minimal() +
-  theme(legend.position = "right") +
-  guides(fill = guide_legend(title = "Gravité"))
+  theme(legend.position = "bottom")
+
 
 # ------------------------------------------------------------------------------------------------
 # -------------------------------- [ Nombre d’accidents par tranches d’heure ]
