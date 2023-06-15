@@ -75,15 +75,17 @@ accidents_par_gravite <- as.data.frame(table(data$descr_grav))
 # Renommer les colonnes pour correspondre à votre dataframe
 names(accidents_par_gravite) <- c("descr_grav", "count")
 
-legende <- c("Indemne", "Tué", "Blessé hospitalisé", "Blessé léger")
+legende <- c("Blessé hospitalisé", "Blessé léger", "Indemne", "Tué")
 
-# Création du diagramme à barres avec étiquettes
-ggplot(data = accidents_par_gravite, aes(x = descr_grav, y = count)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  geom_text(aes(label = count), vjust = -0.3, size = 3.5) +
-  scale_x_discrete(labels = legende) +
-  labs(x = "Gravité de l'accident", y = "Nombre d'accidents", title = "Répartition des accidents par gravité") +
-  theme_minimal()
+# Création du diagramme camembert avec étiquettes en conservant les accents de la légende
+ggplot(data = accidents_par_gravite, aes(x = "", y = count, fill = descr_grav)) +
+  geom_bar(stat = "identity", width = 1) +
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5), size = 3.5) +
+  coord_polar("y", start = 0) +
+  scale_fill_discrete(labels = legende) +
+  labs(x = "", y = "", title = "Répartition des accidents selon la gravité") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
 
 # ------------------------------------------------------------------------------------------------
