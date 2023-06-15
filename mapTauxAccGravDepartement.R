@@ -33,15 +33,10 @@ stat_acc_V3_cleared <- read.csv("data/stat_acc_V3_cleared.csv", sep = ";")
 merged_data <- left_join(stat_acc_V3_cleared, correspondance_region, by = c("id_code_insee" = "CodeINSEE"))
 
 
-# special character normalization
+# special character and other normalization
 merged_data$region <- gsub("\\[\"|\"\\]", "", merged_data$region)
 merged_data$region <- toupper(trimws(merged_data$region))
 
-
-
-# au lieu de faire la moyenne des accidents calcul plutot un taux d'accident en prenant le nombre d'accident grave sur nb d'accident total sachant 
-# accident grave sur accident total
-# dans le fichier stat_acc_V3_cleared.csv colonne descr_grav
 # 1 indemme 
 # 2 tué
 # 3 blessé hospitalisé
@@ -57,7 +52,7 @@ accidents_departement <- merged_data %>%
 
 
 
-# Special character normalization
+# Special character and other things normalization
 accidents_departement$Département <- toupper(gsub("\\['|'\\]", "", accidents_departement$Département))
 #accidents_departement$Département <- toupper(accidents_departement$Département)
 department_geojson$nom <- iconv(department_geojson$nom, "UTF-8", "ASCII//TRANSLIT")
